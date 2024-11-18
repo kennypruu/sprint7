@@ -1,0 +1,89 @@
+"""IMC"""
+
+def calc_imc(peso, altura):
+    
+    imc = peso / (altura ** 2)
+    
+    if imc < 18.5: cat = "Bajo Peso"
+    
+    elif 18.5 <= imc < 25: cat = "Peso Normal"
+    
+    elif 25 <= imc < 30: cat = "Sobrepeso"
+    
+    else: cat = "Obesidad"
+    
+    return imc, cat
+
+def obtener_datos_imc():
+    
+    import keyboard
+    
+    while True:
+        
+        peso = input("Ingresa el peso en 'Kg' o presiona ESC para volver al principio: ").replace(",", ".").replace("kg", "").replace("Kg", "").replace("KG", "")
+        
+        try:
+            
+            valor_peso = float(peso)  
+            
+            if 29.9 <= valor_peso <= 250.1: break
+            
+            else: print(f"El valor ingresado para el peso es {peso}. La masa corporal se certifica solo para valores entre 30 kg y 250 kg. Ingresa otra vez el peso.")
+        
+        except ValueError:
+            
+            if keyboard.is_pressed('esc'): print("Has presionado Esc. ") ; return None, None
+
+            elif not peso: print("No has ingresado el peso.")
+            
+            else: print(f"El valor ingresado no es valido: {peso}. Ingresa otra vez el peso.")
+
+    while True:
+        
+        altura = input("Ingresa la altura en 'm' o presiona ESC para volver al principio: ").replace(",", ".").replace("m","").replace("M","")
+        
+        try:
+            
+            valor_altura = float(altura)
+            
+            if 0.9 <= valor_altura <= 2.6: break
+            
+            else: print(f"El valor ingresado para la altura es {valor_altura}. La masa corporal se certifica solo para valores entre 1 m y 2.5 m. Ingresa otra vez la altura.")
+        
+        except ValueError:
+            
+            if keyboard.is_pressed('esc'): print("Has presionado Esc ") ; return None, None
+
+            elif not altura: print("No has ingresado la altura")
+            
+            else: print(f"El valor ingresado no es valido: {altura}. Ingresa otra vez la altura.")
+                
+    return valor_peso, valor_altura
+
+def main_imc():
+
+    import keyboard
+
+    print("Programa para el calculo del Índice de masa corporal.")
+    
+    while True:
+        
+        respuesta = input("Quieres calcular el IMC de una persona? (y/n): ").strip().lower()
+        
+        if keyboard.is_pressed('esc') or respuesta == 'n': print("Salida del programa.") ; break
+
+        elif respuesta == "y":
+            
+            peso, altura = obtener_datos_imc()
+            
+            if peso is not None and altura is not None:
+                
+                imc, categoria = calc_imc(peso, altura)
+                
+                print(f"Datos de peso y altura recibidos: {peso}, {altura}\nIMC = {imc:.2f}\nCategoria = {categoria}.")
+                
+                break
+            
+        else: print("Respuesta no reconocida. Presiona 'y' o 'n' o 'Esc'.")
+
+main_imc()
