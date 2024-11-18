@@ -1,0 +1,74 @@
+"""Temperaturas"""
+
+def celsius_2_fahrenheit(celsius): return (celsius * 9/5) + 32
+def celsius_2_kelvin(celsius): return celsius + 273.15
+def fahrenheit_2_celsius(fahrenheit): return (fahrenheit - 32) * 5/9
+def fahrenheit_2_kelvin(fahrenheit): return (fahrenheit - 32) * 5 / 9 + 273.15
+def kelvin_2_celsius(kelvin): return kelvin - 273.15
+def kelvin_2_fahrenheit(kelvin): return (kelvin - 273.15) * 9 / 5 + 32
+
+def convertir_temperatura(temp_in):
+
+    if temp_in[-1].upper() == 'C': return f"{float(temp_in[:-1])}° Celsius equivalen a : {celsius_2_fahrenheit(float(temp_in[:-1])):.2f}° Fahrenheit y equivalen a : {celsius_2_kelvin(float(temp_in[:-1])):.2f}° Kelvin."
+    
+    elif temp_in[-1].upper() == 'F': return f"{float(temp_in[:-1])}° Fahrenheit equivalen a : {fahrenheit_2_celsius(float(temp_in[:-1])):.2f}° Celsius y equivalen a : {fahrenheit_2_kelvin(float(temp_in[:-1])):.2f}° Kelvin."
+    
+    elif temp_in[-1].upper() == 'K': return f"{float(temp_in[:-1])}° Kelvin equivalen a : {kelvin_2_celsius(float(temp_in[:-1])):.2f}° Celsius y equivalen a : {kelvin_2_fahrenheit(float(temp_in[:-1])):.2f}° Fahrenheit."
+
+def obtener_temperatura():
+
+    import keyboard
+    
+    while True:
+        
+        temp_in = input("Ingresa la temperatura que quieres convertir con su unidad de medida\n(ejemplos: 25C, 77F, 300K): ").strip().replace(',', '.').replace("°", "")
+        
+        if keyboard.is_pressed('esc'): print("Has presionado Esc.") ; return None
+
+        elif not temp_in: print("No has ingresado la temperatura.")
+
+        elif len(temp_in) == 1: print(f"El valor ingresado no es valido: ' {temp_in} ', recuerda igresar la temperatura seguida de su unidad de medida (ejemplos: 25C, 77F, 300K)")
+
+        elif temp_in[-1].upper() not in ['C', 'F', 'K']: print("Unidad de medida no reconocida. Recuerda añadir C, F o K despues del valor de la temperatura.")
+
+        else:
+
+            try: temp_valor = float(temp_in[:-1])  
+
+            except ValueError: print("Ingresa un valor numerico valido para la temperatura seguido de su unidad de medida.")
+
+            if temp_in[-1].upper() == 'C' and -273.15 <= temp_valor <= 1000: return temp_in
+            
+            elif temp_in[-1].upper() == 'F' and -459.67 <= temp_valor <= 1832: return temp_in
+            
+            elif temp_in[-1].upper() == 'K' and 0 <= temp_valor <= 1273.15: return temp_in
+            
+            else:
+                
+                if temp_in[-1].upper() == 'C': print("Las temperaturas en Celsius tienen que ser entre -273.15°C y 1000°C.")
+                
+                if temp_in[-1].upper() == 'F': print("Las temperaturas en Fahrenheit tienen que ser entre -459.67°F y 1832°F.")
+                
+                if temp_in[-1].upper() == 'K': print("Las temperaturas en Kelvin tienen que ser entre 0K y 1273.15K.")            
+
+def main_temp():
+
+    import keyboard
+
+    print("Programa para la conversion de temperaturas entre Celsius (c), Fahrenheit (f) e Kelvin (k):")
+
+    while True:
+
+        respuesta = input("Quieres convertir temperaturas entre Celsius (c), Fahrenheit (f) e Kelvin (k)? (y/n): ").strip().lower()
+        
+        if keyboard.is_pressed('esc') or respuesta == 'n': print("Salida del programa.") ; break
+
+        elif respuesta == 'y':
+
+            temp_in = obtener_temperatura()
+
+            if temp_in is not None: print(convertir_temperatura(temp_in)) ; break
+
+        else: print("Respuesta no reconocida. Presiona 'y' o 'n' o 'Esc'.")
+
+main_temp()
