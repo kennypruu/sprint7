@@ -1,0 +1,58 @@
+"""Cuenta Palabras"""
+
+def comptador_paraules(texto):
+
+    import string
+
+    palabras = texto.lower().translate(str.maketrans(string.punctuation, ' ' * len(string.punctuation))).split()
+
+    contador = {}
+
+    for word in palabras: contador[word] = contador.get(word, 0) + 1
+
+    return contador
+
+def obtener_texto():
+
+    while True:
+
+        import keyboard
+
+        texto_in = input("Escribe el texto:\n")
+                
+        if keyboard.is_pressed('esc'): print("Has presionado Esc.") ;  return None
+
+        elif not texto_in: print("No has ingresado ningun texto")
+
+        else: return texto_in
+
+
+def main_cuenta_palabras():
+
+    import keyboard
+
+    print("Programa para contar las veces que aparece cada palabra o cada numero en un texto")
+    
+    while True:
+
+        respuesta = input("Quieres ingresar un texto para contar las palabras? (y/n): ").strip().lower()
+
+        if keyboard.is_pressed('esc') or respuesta == 'n' or respuesta == 'N': print("Salida del programa ") ; break
+        
+        elif respuesta == 'y' or respuesta == 'Y':
+                
+                texto_in = obtener_texto()
+
+                if texto_in is not None:
+
+                    print(f"\nHas ingresado:\n{texto_in}\n\nResultado:")
+
+                    for palabra, count in sorted(comptador_paraules(texto_in).items(), key=lambda item: (-item[1], item[0])): 
+                         
+                         print(f"'{palabra}' = {count}")
+
+                    break
+        
+        else: print("Respuesta no reconocida. Presiona 'y' o 'n'.")
+
+main_cuenta_palabras()
