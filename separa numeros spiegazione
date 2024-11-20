@@ -1,0 +1,184 @@
+Per spiegare ancora meglio il codice e il suo funzionamento, suddividiamo il processo in piccoli passi, con esempi pratici e dettagliati. Vogliamo chiarire come il programma separa numeri e non numeri all'interno di una lista, gestendo anche i casi complessi come liste o tuple annidate. Esplorerò ogni parte del codice passo per passo, con spiegazioni e esempi chiari.
+
+---
+
+### Obiettivo del programma
+
+Il programma ha come obiettivo separare gli **elementi numerici** (sia numeri veri e propri che stringhe che rappresentano numeri) da **elementi non numerici** (come parole o stringhe che non possono essere convertite in numeri). Per fare questo, il programma utilizza una funzione che analizza ogni elemento della lista e prova a convertirlo in un numero.
+
+---
+
+### Funzione principale: `separa_numeros`
+
+La funzione `separa_numeros` è la funzione che effettua tutto il lavoro di separazione degli elementi numerici da quelli non numerici. Analizziamo la sua struttura.
+
+```python
+def separa_numeros(lista):
+    lista_de_convertibles = []
+    lista_de_no_convertibles = []
+```
+
+- **`lista_de_convertibles`**: È la lista che conterrà tutti gli elementi che possono essere convertiti in numeri (esempio: numeri in formato stringa, numeri in formato scientifico, numeri interi, ecc.).
+- **`lista_de_no_convertibles`**: È la lista che conterrà tutti gli elementi che non possono essere convertiti in numeri (esempio: parole o espressioni matematiche non standard).
+
+---
+
+#### Funzione annidata `procesa_elemento`
+
+Dentro la funzione principale `separa_numeros`, troviamo una funzione **annidata** chiamata `procesa_elemento`. Questa funzione si occupa di analizzare ciascun **elemento singolo** della lista. È una funzione **ricorsiva**, cioè che chiama se stessa per gestire eventuali sottoliste o tuple all'interno della lista.
+
+```python
+def procesa_elemento(elemento):
+    if isinstance(elemento, (tuple, list)): 
+        for sub_item in elemento: 
+            procesa_elemento(sub_item)
+```
+
+- **`isinstance(elemento, (tuple, list))`**: Questa riga controlla se l'elemento è una lista o una tupla. Se l'elemento è una lista o tupla, allora eseguiamo un ciclo su ciascun **sotto-elemento** di quella lista o tupla, chiamando la funzione `procesa_elemento` ricorsivamente su ciascun sotto-elemento.
+
+#### Esempio di ricorsione
+
+Immagina di avere una lista come questa:
+```python
+['1.3', ('2', 1, 3.5), 'one']
+```
+
+Quando `procesa_elemento` incontra la tupla `('2', 1, 3.5)`, eseguirà un ciclo sui suoi sotto-elementi:
+1. Il primo sotto-elemento è `'2'`, che verrà processato.
+2. Il secondo sotto-elemento è `1`, che verrà processato.
+3. Il terzo sotto-elemento è `3.5`, che verrà processato.
+
+Questo permette alla funzione di gestire anche strutture annidate, come liste dentro altre liste o tuple.
+
+---
+
+#### Conversione degli elementi in numeri
+
+Se l'elemento non è una lista o tupla, la funzione prova a convertirlo in un numero usando `float()`:
+
+```python
+else:
+    try:
+        lista_de_convertibles.append(float(elemento))
+```
+
+- **`float(elemento)`**: Questo tenta di convertire l'elemento in un numero decimale (tipo float). Se l'elemento è una stringa che rappresenta un numero (ad esempio `'3.5'`), verrà convertito in un numero `3.5`. Se l'elemento è già un numero (ad esempio `2`), non ci sarà problema. L'elemento verrà quindi aggiunto alla lista `lista_de_convertibles`.
+
+#### Esempio di conversione
+
+Se l'elemento è la stringa `'1.3'`, viene convertito in `1.3` e aggiunto a `lista_de_convertibles`.
+
+Se l'elemento è la stringa `'1e10'`, viene convertito in `10000000000.0`, poiché `'1e10'` è una notazione scientifica che rappresenta `1 * 10^10`.
+
+Se l'elemento è `'one'`, che non può essere convertito in numero, il programma solleverà un errore.
+
+---
+
+#### Gestione degli errori
+
+Se la conversione non riesce, viene sollevato un errore `ValueError` o `TypeError`. In questo caso, l'elemento viene aggiunto alla lista `lista_de_no_convertibles`.
+
+```python
+except (ValueError, TypeError):
+    lista_de_no_convertibles.append(elemento)
+```
+
+- Questo blocco di codice gestisce gli **errori** che si verificano quando `float()` non può convertire un elemento in un numero. Ad esempio, la parola `'one'` non può essere convertita in un numero, quindi viene aggiunta alla lista dei non numerici.
+
+---
+
+#### Ciclo su tutta la lista
+
+Una volta che abbiamo definito la funzione `procesa_elemento`, dobbiamo applicarla a ogni elemento della lista principale. Questo viene fatto con un ciclo `for`:
+
+```python
+for item in lista:
+    procesa_elemento(item)
+```
+
+- **Ciclo `for`**: Itera su ogni elemento della lista `lista` e chiama la funzione `procesa_elemento` su di esso. Se l'elemento è una lista o una tupla, la funzione verrà chiamata ricorsivamente per analizzare ogni sotto-elemento.
+
+---
+
+### Restituzione dei risultati
+
+Una volta che tutti gli elementi sono stati processati, la funzione restituisce le due liste:
+
+```python
+return lista_de_convertibles, lista_de_no_convertibles
+```
+
+- **`lista_de_convertibles`**: Contiene tutti gli elementi che sono stati convertiti con successo in numeri (o già numerici).
+- **`lista_de_no_convertibles`**: Contiene gli elementi che non sono riusciti a essere convertiti in numeri.
+
+---
+
+### Funzione `main_separa_numeros`
+
+La funzione `main_separa_numeros` è quella che avvia il programma e mostra i risultati:
+
+```python
+def main_separa_numeros():
+    lista_prueba = ['1.3', 'one', '1e10', 'seven', '3-1/2', ('2', 1, 1.4, 'not-a-number'), [1, 2, '3', '3.4']]
+    lista_convertibles, lista_no_convertibles = separa_numeros(lista_prueba)
+    print(f"Elementos convertibles: \n{lista_convertibles}\n")
+    print(f"Elementos no convertibles: \n{lista_no_convertibles}\n")
+```
+
+1. **Dichiarazione della lista di prova**: `lista_prueba` è una lista che contiene vari tipi di dati: numeri (sia come stringhe che come numeri reali), parole, e anche strutture annidate (liste e tuple).
+   
+   Ecco il contenuto di `lista_prueba`:
+   ```python
+   ['1.3', 'one', '1e10', 'seven', '3-1/2', ('2', 1, 1.4, 'not-a-number'), [1, 2, '3', '3.4']]
+   ```
+
+2. **Chiamata alla funzione `separa_numeros`**: Passa `lista_prueba` alla funzione `separa_numeros`, che restituisce due liste: una con i numeri e l'altra con gli elementi non numerici.
+
+3. **Stampa dei risultati**: I risultati vengono stampati:
+   - **`lista_convertibles`**: Tutti gli elementi che sono stati convertiti con successo in numeri.
+   - **`lista_no_convertibles`**: Gli elementi che non sono stati convertiti in numeri.
+
+---
+
+### Esempio di esecuzione
+
+Diamo uno sguardo a come il programma si comporta con l'esempio di lista:
+
+```python
+lista_prueba = ['1.3', 'one', '1e10', 'seven', '3-1/2', ('2', 1, 1.4, 'not-a-number'), [1, 2, '3', '3.4']]
+```
+
+#### Elenco dei numeri:
+- `'1.3'` diventa `1.3` (aggiunto alla lista dei numeri).
+- `'1e10'` diventa `10000000000.0` (aggiunto alla lista dei numeri).
+- `1` è già un numero (aggiunto alla lista dei numeri).
+- `1.4` è già un numero (aggiunto alla lista dei numeri).
+- `1.0`, `2.0`, `3.0`, `3.4` vengono convertiti e aggiunti alla lista dei numeri.
+
+#### Elenco dei non numeri:
+- `'one'` non può essere convertito (aggiunto alla lista dei non numeri).
+- `'seven'` non può essere convertito (aggiunto alla lista dei non numeri
+
+).
+- `'3-1/2'` non può essere convertito (aggiunto alla lista dei non numeri).
+- `'not-a-number'` non può essere convertito (aggiunto alla lista dei non numeri).
+
+### Risultato
+
+L'output sarà simile a questo:
+
+```
+Elementos convertibles: 
+[1.3, 10000000000.0, 1.0, 1.4, 2.0, 3.0, 3.4]
+
+Elementos no convertibles: 
+['one', 'seven', '3-1/2', 'not-a-number']
+```
+
+---
+
+### Conclusioni
+
+- Il programma è utile per separare numeri e valori non numerici all'interno di strutture complesse come liste annidate o tuple.
+- La funzione **ricorsiva** `procesa_elemento` è fondamentale per esplorare le strutture annidate.
+- Gli errori durante la conversione in numeri sono gestiti in modo elegante, separando correttamente i numeri validi e quelli non validi.
