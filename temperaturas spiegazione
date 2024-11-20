@@ -1,0 +1,170 @@
+Per spiegare il programma in modo ancora più dettagliato, vediamo ciascuna parte del codice e dei suoi comportamenti in profondità. Il programma ha l’obiettivo di convertire temperature tra tre unità: Celsius (°C), Fahrenheit (°F) e Kelvin (K), offrendo un'interfaccia semplice per l'utente che consente di inserire una temperatura e ottenere le sue conversioni.
+
+### 1. **Le Funzioni di Conversione**
+
+Il programma inizia con sei funzioni, ognuna delle quali è dedicata alla conversione di una temperatura tra due unità. Queste funzioni sono fondamentali per l'accuratezza del programma.
+
+#### a. **Funzione `celsius_2_fahrenheit`**
+
+```python
+def celsius_2_fahrenheit(celsius):
+    return (celsius * 9/5) + 32
+```
+
+- **Descrizione**: Converte una temperatura da Celsius a Fahrenheit.
+- **Formula**: La formula per questa conversione è `(Celsius * 9/5) + 32`. Ad esempio, se `celsius = 0`, la conversione in Fahrenheit sarebbe `32°F`.
+
+#### b. **Funzione `celsius_2_kelvin`**
+
+```python
+def celsius_2_kelvin(celsius):
+    return celsius + 273.15
+```
+
+- **Descrizione**: Converte una temperatura da Celsius a Kelvin.
+- **Formula**: La formula è semplice: `Kelvin = Celsius + 273.15`. Ad esempio, `0°C` corrisponde a `273.15K`.
+
+#### c. **Funzione `fahrenheit_2_celsius`**
+
+```python
+def fahrenheit_2_celsius(fahrenheit):
+    return (fahrenheit - 32) * 5/9
+```
+
+- **Descrizione**: Converte una temperatura da Fahrenheit a Celsius.
+- **Formula**: La formula per questa conversione è `(Fahrenheit - 32) * 5/9`. Ad esempio, se `fahrenheit = 32`, il risultato sarà `0°C`.
+
+#### d. **Funzione `fahrenheit_2_kelvin`**
+
+```python
+def fahrenheit_2_kelvin(fahrenheit):
+    return (fahrenheit - 32) * 5 / 9 + 273.15
+```
+
+- **Descrizione**: Converte una temperatura da Fahrenheit a Kelvin.
+- **Formula**: La formula è `(Fahrenheit - 32) * 5/9 + 273.15`. Ad esempio, `32°F` corrisponde a `273.15K`.
+
+#### e. **Funzione `kelvin_2_celsius`**
+
+```python
+def kelvin_2_celsius(kelvin):
+    return kelvin - 273.15
+```
+
+- **Descrizione**: Converte una temperatura da Kelvin a Celsius.
+- **Formula**: La formula è `Celsius = Kelvin - 273.15`. Ad esempio, `273.15K` corrisponde a `0°C`.
+
+#### f. **Funzione `kelvin_2_fahrenheit`**
+
+```python
+def kelvin_2_fahrenheit(kelvin):
+    return (kelvin - 273.15) * 9 / 5 + 32
+```
+
+- **Descrizione**: Converte una temperatura da Kelvin a Fahrenheit.
+- **Formula**: La formula per questa conversione è `(Kelvin - 273.15) * 9/5 + 32`. Ad esempio, `273.15K` corrisponde a `32°F`.
+
+### 2. **Funzione `convertir_temperatura`**
+
+La funzione `convertir_temperatura` riceve come input una temperatura in formato stringa, come ad esempio `25C`, `77F`, o `300K`. La funzione esegue la conversione della temperatura in base all'unità di misura che trova nell'input dell'utente e restituisce una stringa che mostra i risultati delle conversioni.
+
+```python
+def convertir_temperatura(temp_in):
+    if temp_in[-1].upper() == 'C':
+        return f"{float(temp_in[:-1])}° Celsius equivalen a : {celsius_2_fahrenheit(float(temp_in[:-1])):.2f}° Fahrenheit y equivalen a : {celsius_2_kelvin(float(temp_in[:-1])):.2f}° Kelvin."
+    elif temp_in[-1].upper() == 'F':
+        return f"{float(temp_in[:-1])}° Fahrenheit equivalen a : {fahrenheit_2_celsius(float(temp_in[:-1])):.2f}° Celsius y equivalen a : {fahrenheit_2_kelvin(float(temp_in[:-1])):.2f}° Kelvin."
+    elif temp_in[-1].upper() == 'K':
+        return f"{float(temp_in[:-1])}° Kelvin equivalen a : {kelvin_2_celsius(float(temp_in[:-1])):.2f}° Celsius y equivalen a : {kelvin_2_fahrenheit(float(temp_in[:-1])):.2f}° Fahrenheit."
+```
+
+- **Controllo dell'unità di misura**: La funzione verifica quale unità di misura è stata inserita, esaminando l'ultimo carattere della stringa `temp_in`. Usa `upper()` per non fare distinzione tra maiuscole e minuscole.
+- **Conversione**: A seconda del tipo di unità (Celsius, Fahrenheit o Kelvin), la funzione applica le rispettive funzioni di conversione e formatta i risultati.
+- **Formato della risposta**: Utilizza il formato `f"{valore:.2f}"` per mostrare i risultati con due decimali. Ad esempio, se l'input è `25C`, il programma restituirà:
+  ```
+  "25.0° Celsius equivalen a : 77.00° Fahrenheit y equivalen a : 298.15° Kelvin."
+  ```
+
+### 3. **Funzione `obtener_temperatura`**
+
+La funzione `obtener_temperatura` gestisce l'input dell'utente. Questo è un processo interattivo che richiede all'utente di inserire una temperatura in un formato valido. La funzione gestisce vari errori e controlla se l'input è corretto.
+
+```python
+def obtener_temperatura():
+    while True:
+        temp_in = input("Ingresa la temperatura que quieres convertir con su unidad de medida\n(ejemplos: 25C, 77F, 300K): ").strip().replace(',', '.').replace("°", "")
+        if keyboard.is_pressed('esc'):
+            print("Has presionado Esc.")
+            return None
+        elif not temp_in:
+            print("No has ingresado la temperatura.")
+        elif len(temp_in) == 1:
+            print(f"El valor ingresado no es valido: ' {temp_in} ', recuerda igresar la temperatura seguida de su unidad de medida (ejemplos: 25C, 77F, 300K)")
+        elif temp_in[-1].upper() not in ['C', 'F', 'K']:
+            print("Unidad de medida no reconocida. Recuerda añadir C, F o K despues del valor de la temperatura.")
+        else:
+            try:
+                temp_valor = float(temp_in[:-1])
+            except ValueError:
+                print("Ingresa un valor numerico valido para la temperatura seguido de su unidad de medida.")
+            if temp_in[-1].upper() == 'C' and -273.15 <= temp_valor <= 1000:
+                return temp_in
+            elif temp_in[-1].upper() == 'F' and -459.67 <= temp_valor <= 1832:
+                return temp_in
+            elif temp_in[-1].upper() == 'K' and 0 <= temp_valor <= 1273.15:
+                return temp_in
+            else:
+                if temp_in[-1].upper() == 'C':
+                    print("Las temperaturas en Celsius tienen que ser entre -273.15°C y 1000°C.")
+                if temp_in[-1].upper() == 'F':
+                    print("Las temperaturas en Fahrenheit tienen que ser entre -459.67°F y 1832°F.")
+                if temp_in[-1].upper() == 'K':
+                    print("Las temperaturas en Kelvin tienen que ser entre 0K y 1273.15K.")
+```
+
+- **Gestione dell'input**: 
+  - Usa `strip()` per rimuovere eventuali spazi extra e `replace(',', '.')` per permettere all'utente di usare la virgola al posto del punto decimale.
+  - Se l'utente preme il tasto `Esc`, il programma termina.
+  - Verifica se l'input è vuoto o se contiene un valore non valido.
+  
+- **Controllo dei limiti delle temperature**:
+  - Ogni unità (Celsius, Fahrenheit, Kelvin) ha limiti validi. Se la temperatura non rientra nei limiti accettabili, la funzione restituisce un messaggio di errore.
+
+### 4. **Funzione `main_temp`**
+
+La funzione `main_temp` è il cuore del programma. Gestisce l’interazione dell'utente e guida l'esecuzione del programma.
+
+```python
+def main_temp():
+    print("Programa para la conversion de temperaturas entre Celsius (c), Fahrenheit (f) e Kelvin (k):\n")
+    while True:
+        respuesta = input("Quieres convertir temperaturas entre Celsius (c), Fahrenheit (f) e Kelvin (k)? (y/n): ").strip().lower()
+        if keyboard.is_pressed('esc') or
+
+ respuesta == 'n':
+            print("Programa terminado.")
+            break
+        elif respuesta == 'y':
+            temperatura = obtener_temperatura()
+            if temperatura:
+                print(convertir_temperatura(temperatura))
+        else:
+            print("Opcion no valida.")
+```
+
+- **Ciclo principale**: Chiede all'utente se vuole continuare a fare conversioni o terminare. Se l'utente risponde `y`, chiama la funzione `obtener_temperatura` per ricevere l'input e poi esegue la conversione.
+  
+- **Interruzione del programma**: Se l'utente risponde `n` o preme `Esc`, il programma termina con un messaggio di saluto.
+
+### 5. **Avvio del programma**
+
+Infine, il programma viene avviato con la chiamata alla funzione `main_temp`:
+
+```python
+if __name__ == "__main__":
+    main_temp()
+```
+
+Questo codice esegue la funzione `main_temp()` quando lo script viene eseguito, avviando così il programma di conversione.
+
+In sintesi, il programma offre una serie di funzionalità per la conversione delle temperature con controllo degli errori, interazione con l'utente e un ciclo continuo fino alla decisione di fermarsi.
