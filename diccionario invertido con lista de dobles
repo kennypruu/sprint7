@@ -16,20 +16,60 @@ def diccionario_inverso(diccionario_original):
     
     return diccionario_inv
 
-def main_invertir_diccionario(diccionario):
+def main_invertir_diccionario_con_dobles():
+
+    print("Programa para invertir un diccionario dado con listas para valores dobles\n")
+    
+    diccionario1 = {'a': 1, 'b': 2, 'c': 3}
+
+    diccionario2 = {'x': 'apple', 'y': 'banana', 'z': 'banana'}
+
+    for diccionario in [diccionario1, diccionario2]:
+
+        diccionario_inv = diccionario_inverso(diccionario)
+
+        print(f"Diccionario original:\n{diccionario}\n")
+        
+        if any(isinstance(value, list) for value in diccionario_inv.values()): print(f"Error: multiple keys for one value\nDiccionario invertido:\n{diccionario_inv}\n\n")
+        
+        else: print(f"El diccionario ha sido invertido correctamente\nDiccionario invertido:\n{diccionario_inv}\n\n")
+        
+main_invertir_diccionario_con_dobles()
+
+
+
+
+"""Diccionario inverso con lista para dobles v2"""
+
+def diccionario_inverso(diccionario_original):
+    
+    diccionario_inv = {}
+    
+    for key, value in diccionario_original.items():
+    
+        if value in diccionario_inv:
+    
+            if isinstance(diccionario_inv[value], list): diccionario_inv[value].append(key)
+            
+            else: diccionario_inv[value] = [diccionario_inv[value], key]
+        
+        else: diccionario_inv[value] = key
+    
+    return diccionario_inv
+
+def main_invertir_diccionario_con_doblesv2(diccionario):
+
+    print("Programa para invertir un diccionario dado con listas para valores dobles\n")
 
     diccionario_inv = diccionario_inverso(diccionario)
 
     print(f"Diccionario original:\n{diccionario}\n")
     
-    if any(isinstance(value, list) for value in diccionario_inv.values()): print("Error: multiple keys for one value\n")
+    if any(isinstance(value, list) for value in diccionario_inv.values()): print(f"Error: multiple keys for one value\nDiccionario invertido:\n{diccionario_inv}\n\n")
 
-    else: print("El diccionario ha sido invertido correctamente\n")
-
-    print(f"Diccionario invertido:\n{diccionario_inv}\n\n")
-
+    else: print(f"El diccionario ha sido invertido correctamente\nDiccionario invertido:\n{diccionario_inv}\n\n")
 
 diccionario1 = {'a': 1, 'b': 2, 'c': 3}
 diccionario2 = {'x': 'apple', 'y': 'banana', 'z': 'banana'}
-main_invertir_diccionario(diccionario1)
-main_invertir_diccionario(diccionario2)
+main_invertir_diccionario_con_doblesv2(diccionario1)
+main_invertir_diccionario_con_doblesv2(diccionario2)
