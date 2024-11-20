@@ -16,8 +16,6 @@ def convertir_temperatura(temp_in):
     elif temp_in[-1].upper() == 'K': return f"{float(temp_in[:-1])}° Kelvin equivalen a : {kelvin_2_celsius(float(temp_in[:-1])):.2f}° Celsius y equivalen a : {kelvin_2_fahrenheit(float(temp_in[:-1])):.2f}° Fahrenheit."
 
 def obtener_temperatura():
-
-    import keyboard
     
     while True:
         
@@ -53,9 +51,7 @@ def obtener_temperatura():
 
 def main_temp():
 
-    import keyboard
-
-    print("Programa para la conversion de temperaturas entre Celsius (c), Fahrenheit (f) e Kelvin (k):")
+    print("Programa para la conversion de temperaturas entre Celsius (c), Fahrenheit (f) e Kelvin (k):\n")
 
     while True:
 
@@ -71,4 +67,8 @@ def main_temp():
 
         else: print("Respuesta no reconocida. Presiona 'y' o 'n' o 'Esc'.")
 
+import keyboard
+
 main_temp()
+
+
