@@ -1,0 +1,41 @@
+# Resumen Sprint 7
+
+def menu_programas():
+
+    import keyboard
+    
+    while True:
+
+        print("\n\n**********************************************************\nElige el programa que deseas utilizar:\n")
+        print("1. Calcular IMC")
+        print("2. Conversión de temperaturas")
+        print("3. Contar palabras en un texto")
+        print("4. Diccionario inverso con error por llaves duplicadas")
+        print("5. Diccionario inverso con lista para llaves duplicadas")
+        print("6. Separar números de otros valores")
+        print("7. Contar palabras en un archivo")
+        print("0. Salir\n**********************************************************\n")
+        
+            
+        eleccion = (input("Introduce el número del programa que deseas ejecutar (1-7): "))
+
+        if eleccion == '1': main_imc()
+
+        elif eleccion == '2': main_temp()
+
+        elif eleccion == '3': main_cuenta_palabras()
+
+        elif eleccion == '4': main_invertir_diccionario_con_error()
+
+        elif eleccion == '5': main_invertir_diccionario_con_dobles()
+
+        elif eleccion == '6': main_separa_numeros()
+
+        elif eleccion == '7': cuenta_palabras_file()
+        
+        elif eleccion == 0 or keyboard.is_pressed('esc') : print("Salida del programa"); break
+
+        else : print("Eleccion no reconocida.\nIngresa un número entre 1 y 7 para un programa.\nPresiona 0 o Esc para salir.")
+
+
+menu_programas()
