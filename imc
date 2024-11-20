@@ -15,12 +15,10 @@ def calc_imc(peso, altura):
     return imc, cat
 
 def obtener_datos_imc():
-    
-    import keyboard
-    
+        
     while True:
         
-        peso = input("Ingresa el peso en 'Kg' o presiona ESC para volver al principio: ").replace(",", ".").replace("kg", "").replace("Kg", "").replace("KG", "")
+        peso = input("Ingresa el peso en 'Kg' o presiona ESC para volver al principio: ").replace(",", ".").lower().replace("kg", "")
         
         try:
             
@@ -40,13 +38,13 @@ def obtener_datos_imc():
 
     while True:
         
-        altura = input("Ingresa la altura en 'm' o presiona ESC para volver al principio: ").replace(",", ".").replace("m","").replace("M","")
+        altura = input("Ingresa la altura en 'm' o presiona ESC para volver al principio: ").replace(",", ".").lower().replace("m","")
         
         try:
             
             valor_altura = float(altura)
             
-            if 0.9 <= valor_altura <= 2.6: break
+            if 0.9 < valor_altura < 2.6: break
             
             else: print(f"El valor ingresado para la altura es {valor_altura}. La masa corporal se certifica solo para valores entre 1 m y 2.5 m. Ingresa otra vez la altura.")
         
@@ -62,9 +60,7 @@ def obtener_datos_imc():
 
 def main_imc():
 
-    import keyboard
-
-    print("Programa para el calculo del Índice de masa corporal.")
+    print("Programa para el calculo del Índice de masa corporal.\n")
     
     while True:
         
@@ -80,10 +76,10 @@ def main_imc():
                 
                 imc, categoria = calc_imc(peso, altura)
                 
-                print(f"Datos de peso y altura recibidos: {peso}, {altura}\nIMC = {imc:.2f}\nCategoria = {categoria}.")
-                
-                break
+                print(f"Datos de peso y altura recibidos: {peso}, {altura}\nIMC = {imc:.2f}\nCategoria = {categoria}."); break
             
         else: print("Respuesta no reconocida. Presiona 'y' o 'n' o 'Esc'.")
+
+import keyboard
 
 main_imc()
