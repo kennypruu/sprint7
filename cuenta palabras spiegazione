@@ -1,0 +1,178 @@
+Certo, vediamo il programma in modo ancora più dettagliato, esplorando ogni aspetto del flusso di lavoro e di ogni componente del codice.
+
+### **1. Importazione delle Librerie**
+```python
+import string
+import keyboard
+```
+- **`string`**: La libreria `string` fornisce una serie di costanti e funzioni utili per lavorare con stringhe. In questo programma, viene utilizzata principalmente per accedere a `string.punctuation`, che è una stringa contenente tutti i caratteri di punteggiatura, come `"!"`, `"?"`, `"."`, `"@"`, etc. Questo permette di rimuovere facilmente la punteggiatura dal testo inserito dall'utente.
+  
+- **`keyboard`**: La libreria `keyboard` viene utilizzata per rilevare quando l'utente preme un tasto sulla tastiera. In questo programma, viene usata per rilevare il tasto `Esc`, permettendo all'utente di uscire dal programma in qualsiasi momento.
+
+### **2. Funzione `comptador_paraules`**
+```python
+def comptador_paraules(texto):
+    palabras = texto.lower().translate(str.maketrans(string.punctuation, ' ' * len(string.punctuation))).split()
+    contador = {}
+    for word in palabras: 
+        contador[word] = contador.get(word, 0) + 1
+    return contador
+```
+
+#### **Scopo**:
+Questa funzione ha lo scopo di contare quante volte ogni parola (o numero) appare nel testo che viene passato come argomento.
+
+#### **Dettaglio del Funzionamento**:
+
+1. **Convertire tutto in minuscolo**:
+   ```python
+   palabras = texto.lower()
+   ```
+   - **`texto.lower()`**: Converte tutto il testo in minuscolo, perché le parole vengono considerate uguali indipendentemente dal fatto che siano scritte in maiuscolo o minuscolo. Ad esempio, "Ciao" e "ciao" dovrebbero essere trattate come la stessa parola.
+
+2. **Rimuovere la punteggiatura**:
+   ```python
+   .translate(str.maketrans(string.punctuation, ' ' * len(string.punctuation)))
+   ```
+   - **`string.punctuation`** contiene tutti i simboli di punteggiatura.
+   - **`str.maketrans(string.punctuation, ' ' * len(string.punctuation))`** crea una mappa di traduzione che sostituisce ogni carattere di punteggiatura con uno spazio.
+   - **`.translate(...)`** applica questa mappa al testo, rimuovendo quindi tutti i segni di punteggiatura dal testo e sostituendoli con degli spazi, in modo che le parole siano separate correttamente.
+   
+   Ad esempio, `"Ciao! Come va?"` diventa `"ciao   come va "`, con gli spazi che separano correttamente le parole.
+
+3. **Splitting in parole**:
+   ```python
+   .split()
+   ```
+   - **`.split()`** divide il testo in una lista di parole, separando il testo dove ci sono spazi. Questo genera una lista di parole, come ad esempio: `["ciao", "come", "va"]`.
+
+4. **Contare le parole**:
+   ```python
+   contador = {}
+   for word in palabras: 
+       contador[word] = contador.get(word, 0) + 1
+   ```
+   - **`contador`** è un dizionario che memorizza il conteggio di ogni parola. La chiave del dizionario è la parola, e il valore è il numero di volte che la parola appare nel testo.
+   - **`contador.get(word, 0)`** cerca la parola nel dizionario. Se la parola non è ancora presente, `get` restituisce `0`. La parola viene quindi aggiunta al dizionario con il valore `1`, oppure se esiste già, il valore viene incrementato.
+
+   Alla fine, questa funzione restituirà un dizionario come:
+   ```python
+   {'ciao': 1, 'come': 1, 'va': 1}
+   ```
+
+### **3. Funzione `obtener_texto`**
+```python
+def obtener_texto():
+    while True:
+        texto_in = input("Escribe el texto:\n")
+        if keyboard.is_pressed('esc'): 
+            print("Has presionado Esc.") 
+            return None
+        elif not texto_in: 
+            print("No has ingresado ningun texto")
+        else: 
+            return texto_in
+```
+
+#### **Scopo**:
+Questa funzione gestisce l'inserimento del testo da parte dell'utente, richiedendo di digitare un testo e gestendo le risposte.
+
+#### **Dettaglio del Funzionamento**:
+
+1. **Richiesta di input**:
+   ```python
+   texto_in = input("Escribe el texto:\n")
+   ```
+   - Il programma richiede all'utente di digitare un testo. L'utente può scrivere una qualsiasi sequenza di caratteri e premere `Enter` per confermare.
+
+2. **Controllo del tasto `Esc`**:
+   ```python
+   if keyboard.is_pressed('esc'): 
+       print("Has presionado Esc.") 
+       return None
+   ```
+   - Se l'utente preme il tasto `Esc`, la funzione termina e restituisce `None`, uscendo dalla funzione senza restituire un testo. Questo consente di interrompere il programma in qualsiasi momento.
+
+3. **Controllo se il testo è vuoto**:
+   ```python
+   elif not texto_in: 
+       print("No has ingresado ningun texto")
+   ```
+   - Se l'utente non inserisce nulla e preme solo `Enter`, il programma avvisa che non è stato inserito alcun testo e richiede nuovamente l'input.
+
+4. **Restituire il testo**:
+   ```python
+   else: 
+       return texto_in
+   ```
+   - Se l'utente inserisce del testo valido, questo viene restituito alla funzione chiamante.
+
+### **4. Funzione `main_cuenta_palabras`**
+```python
+def main_cuenta_palabras():
+    print("Programa para contar las veces que aparece cada palabra o cada numero en un texto")
+    
+    while True:
+        respuesta = input("Quieres ingresar un texto para contar las palabras? (y/n): ").strip().lower()
+
+        if keyboard.is_pressed('esc') or respuesta == 'n': 
+            print("Salida del programa ") 
+            break
+        
+        elif respuesta == 'y':
+            texto_in = obtener_texto()
+
+            if texto_in is not None:
+                print(f"\nHas ingresado:\n{texto_in}\n\nResultado:")
+
+                for palabra, count in sorted(comptador_paraules(texto_in).items(), key=lambda item: (-item[1], item[0])):
+                    print(f"'{palabra}' = {count}")
+                break  
+        
+        else: 
+            print("Respuesta no reconocida. Presiona 'y' o 'n'.")
+```
+
+#### **Scopo**:
+Questa è la funzione principale che gestisce l'interazione con l'utente, coordinando le altre funzioni per contare le parole.
+
+#### **Dettaglio del Funzionamento**:
+
+1. **Introduzione al programma**:
+   ```python
+   print("Programa para contar las veces que aparece cada palabra o cada numero en un texto")
+   ```
+   - Viene stampato un messaggio di introduzione che spiega brevemente lo scopo del programma.
+
+2. **Richiesta di avvio del conteggio**:
+   ```python
+   respuesta = input("Quieres ingresar un texto para contar las palabras? (y/n): ").strip().lower()
+   ```
+   - Il programma chiede all'utente se desidera inserire un testo per contare le parole. La risposta viene normalizzata con `strip()` per rimuovere spazi inutili e `lower()` per trattare la risposta in modo case-insensitive (così, "Y" e "y" sono uguali).
+
+3. **Gestione della risposta dell'utente**:
+   - Se l'utente preme il tasto `Esc` o risponde `n`, il programma stampa "Salida del programa" e termina.
+   - Se l'utente risponde `y`, viene chiamata la funzione `obtener_texto()` per ottenere il testo da analizzare.
+   - Se l'utente inserisce una risposta diversa, il programma richiede una risposta valida ("y" o "n").
+
+4. **Conteggio delle parole**:
+   ```python
+   for palabra, count in sorted(comptador_paraules(texto_in).items(), key=lambda item: (-item[1], item[0])):
+       print(f"'{palabra}' = {count}")
+   ```
+   - La funzione `comptador_paraules()` restituisce un dizionario con le parole e i loro conteggi. Questo dizionario viene ordinato:
+     - Prima per **frequenza** (in ordine decrescente), grazie a `-item[1]`.
+     - Poi, in caso di frequenze uguali, per **ordine alfabetico** (in ordine crescente) usando `item[0]`.
+   - Le parole e i loro conteggi vengono stampati uno per uno.
+
+5. **Interruzione del programma**: Se il conteggio delle parole è stato completato, il programma termina.
+
+### **5. Funzione `main_cuenta_palabras()` in esecuzione**
+```python
+main_cuenta_palabras()
+```
+-
+
+ Finalmente, la funzione principale viene chiamata per avviare il programma.
+
+Questo programma è interattivo e consente all'utente di inserire un testo, calcolare la frequenza delle parole e vedere il risultato, con la possibilità di uscire in qualsiasi momento tramite il tasto `Esc`.
