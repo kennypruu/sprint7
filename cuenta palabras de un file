@@ -1,32 +1,66 @@
 """Cuenta palabras de un file"""
 
-def cuenta_palabras(file):
+def cuenta_palabras_file():
 
-    frecuencia = {}
+    import string
+
+    file = 'tu_me_quieres_blanca.txt' 
+    
+    contador = {}
+
+    try:
+        with open(file, 'r', encoding='utf-8') as file:
+
+            palabras = file.read().lower().translate(str.maketrans(string.punctuation + "¡", ' ' * (len(string.punctuation) + 1))).split()
+
+            for word in palabras: contador[word] = contador.get(word, 0) + 1
+
+        diccionario_ordenado = {}
+
+        for word in sorted(contador.keys()): 
+            
+            primeraletra = word[0]
+            
+            if primeraletra not in diccionario_ordenado: diccionario_ordenado[primeraletra] = {}
+
+            diccionario_ordenado[primeraletra][word] = contador[word]
+
+        for letra, palabras in diccionario_ordenado.items():
+
+            print(f"\nPalabras con '{letra}':")
+
+            for palabra, count in palabras.items(): print(f"{palabra}: {count}")
+
+    except FileNotFoundError: print(f"Error: el archivo '{file}' no fue encontrado.")
+
+cuenta_palabras_file()
+
+
+
+
+"""Cuenta palabras de un file v2"""
+
+def cuenta_palabras_filev2(file):
+
+    contador = {}
 
     try:
 
         with open(file, 'r', encoding='utf-8') as file:
+            
+            palabras = file.read().lower().translate(str.maketrans(string.punctuation, ' ' * len(string.punctuation))).split()
 
-            palabras = file.read().lower().translate(str.maketrans('', '', ',.!?;:()¡'))
-
-            palabras = palabras.split()
-
-            for word in palabras:
-
-                if word in frecuencia: frecuencia[word] += 1
-
-                else: frecuencia[word] = 1
+            for word in palabras: contador[word] = contador.get(word, 0) + 1
 
         diccionario_ordenado = {}
 
-        for word in sorted(frecuencia.keys()):
+        for word in sorted(contador.keys()):
 
             primeraletra = word[0]
 
             if primeraletra not in diccionario_ordenado: diccionario_ordenado[primeraletra] = {}
 
-            diccionario_ordenado[primeraletra][word] = frecuencia[word]
+            diccionario_ordenado[primeraletra][word] = contador[word]
 
         for letra, palabras in diccionario_ordenado.items():
 
@@ -36,5 +70,6 @@ def cuenta_palabras(file):
 
     except FileNotFoundError: print("File no encontrado")
 
+import string
 file = 'tu_me_quieres_blanca.txt' 
-cuenta_palabras(file)
+cuenta_palabras_filev2(file)
