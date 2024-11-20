@@ -1,0 +1,62 @@
+"""Diccionario inverso con mensaje de error"""
+
+def diccionario_inverso(diccionario_original):
+    
+    diccionario_inv = {}
+    
+    for key, value in diccionario_original.items():
+    
+        if value in diccionario_inv: return None
+
+        else: diccionario_inv[value] = key
+    
+    return diccionario_inv
+
+
+def main_invertir_diccionario_con_error():
+
+    diccionario1 = {'a': 1, 'b': 2, 'c': 3}
+
+    diccionario2 = {'x': 'apple', 'y': 'banana', 'z': 'banana'}
+
+    print("Programa para invertir un diccionario dado con mensaje de error en caso de llaves dobles\n")
+
+    for diccionario in [diccionario1, diccionario2]:
+
+        diccionario_inv = diccionario_inverso(diccionario)
+
+        if diccionario_inv: print(f"Diccionario original:\n{diccionario}\nDiccionario invertido:\n{diccionario_inv}\n\n")
+        
+        else: print(f"Diccionario original:\n{diccionario}\nError: multiple keys for one value\n")
+
+main_invertir_diccionario_con_error()
+
+"""Diccionario inverso con mensaje de error v2"""
+
+def diccionario_inverso(diccionario_original):
+    
+    diccionario_inv = {}
+    
+    for key, value in diccionario_original.items():
+    
+        if value in diccionario_inv: return None
+
+        else: diccionario_inv[value] = key
+    
+    return diccionario_inv
+
+def main_invertir_diccionario_con_errorv2(diccionario):
+
+    print("Programa para invertir un diccionario dado con mensaje de error en caso de llaves dobles\n")
+
+    diccionario_inv = diccionario_inverso(diccionario)
+
+    if diccionario_inv : print(f"Diccionario original:\n{diccionario}\nDiccionario invertido:\n{diccionario_inv}\n\n")
+
+    else: print("Error: multiple keys for one value\n")
+
+
+diccionario1 = {'a': 1, 'b': 2, 'c': 3}
+diccionario2 = {'x': 'apple', 'y': 'banana', 'z': 'banana'}
+main_invertir_diccionario_con_errorv2(diccionario1)
+main_invertir_diccionario_con_errorv2(diccionario2)
