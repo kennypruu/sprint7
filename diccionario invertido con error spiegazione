@@ -1,0 +1,138 @@
+Certo, vediamo il programma in dettaglio, esaminando ogni parte passo per passo, con una spiegazione chiara e completa.
+
+### Programma: Invertire un dizionario con gestione degli errori
+
+L'obiettivo del programma è quello di prendere un dizionario come input e invertirlo, cioè scambiare i suoi valori con le chiavi. Tuttavia, se ci sono valori duplicati nel dizionario (ad esempio, se due chiavi hanno lo stesso valore), il programma restituirà un messaggio di errore, poiché non è possibile avere due chiavi che corrispondono allo stesso valore in un dizionario.
+
+---
+
+### 1. La funzione `diccionario_inverso(diccionario_original)`
+
+Questa funzione prende un dizionario come input e prova a invertirlo. Ecco il suo codice:
+
+```python
+def diccionario_inverso(diccionario_original):
+    
+    diccionario_inv = {}  # Crea un dizionario vuoto per memorizzare il risultato
+    
+    for key, value in diccionario_original.items():
+        # Per ogni coppia chiave-valore nel dizionario originale
+        if value in diccionario_inv:
+            # Se il valore è già una chiave nel dizionario invertito, ritorna None (errore)
+            return None
+        else:
+            # Se il valore non è ancora presente, aggiungilo al dizionario invertito
+            diccionario_inv[value] = key
+    
+    return diccionario_inv
+```
+
+#### Spiegazione del codice:
+
+1. **`diccionario_inv = {}`**: Inizializziamo un dizionario vuoto chiamato `diccionario_inv`. Questo dizionario conterrà i valori invertiti del dizionario originale.
+
+2. **`for key, value in diccionario_original.items():`**: Usiamo un ciclo `for` per scorrere tutte le coppie di chiavi e valori nel dizionario originale. La funzione `.items()` restituisce una lista di tuple, dove ogni tupla è formata da una chiave e un valore.
+
+3. **`if value in diccionario_inv:`**: Dentro il ciclo, verifichiamo se il valore (`value`) è già presente come chiave nel dizionario invertito (`diccionario_inv`). Se è già presente, significa che ci sono due chiavi con lo stesso valore nel dizionario originale, e quindi non possiamo invertire il dizionario. In tal caso, ritorniamo `None` per segnalare un errore.
+
+4. **`else:`**: Se il valore non è ancora nel dizionario invertito, lo aggiungiamo come una nuova chiave nel dizionario `diccionario_inv`, associandolo alla chiave originale come valore.
+
+5. **`return diccionario_inv`**: Dopo aver attraversato tutto il dizionario originale, se non ci sono errori (duplicati di valore), restituiamo il dizionario invertito.
+
+#### Esempio pratico:
+
+Immagina di avere il seguente dizionario originale:
+
+```python
+diccionario_original = {'a': 1, 'b': 2, 'c': 3}
+```
+
+Il ciclo scorrerà le coppie chiave-valore e creerà il dizionario invertito:
+
+1. Per la coppia `'a': 1`, aggiungerà `1: 'a'` al dizionario invertito.
+2. Per la coppia `'b': 2`, aggiungerà `2: 'b'`.
+3. Per la coppia `'c': 3`, aggiungerà `3: 'c'`.
+
+Alla fine, il dizionario invertito sarà:
+
+```python
+diccionario_inv = {1: 'a', 2: 'b', 3: 'c'}
+```
+
+Se invece il dizionario originale fosse:
+
+```python
+diccionario_original = {'x': 'apple', 'y': 'banana', 'z': 'banana'}
+```
+
+Quando il ciclo arriva alla coppia `'z': 'banana'`, il valore `'banana'` è già presente nel dizionario invertito come chiave. Di conseguenza, la funzione restituirà `None`, indicando un errore.
+
+---
+
+### 2. La funzione `main_invertir_diccionario_con_error()`
+
+Questa funzione si occupa di orchestrare l'esecuzione del programma e di mostrare i risultati all'utente. Ecco il codice:
+
+```python
+def main_invertir_diccionario_con_error():
+    diccionario1 = {'a': 1, 'b': 2, 'c': 3}
+    diccionario2 = {'x': 'apple', 'y': 'banana', 'z': 'banana'}
+
+    print("Programa para invertir un diccionario dado con mensaje de error en caso de llaves dobles\n")
+
+    for diccionario in [diccionario1, diccionario2]:
+        diccionario_inv = diccionario_inverso(diccionario)
+
+        if diccionario_inv: 
+            print(f"Diccionario original:\n{diccionario}\nDiccionario invertido:\n{diccionario_inv}\n\n")
+        else: 
+            print(f"Diccionario original:\n{diccionario}\nError: multiple keys for one value\n")
+```
+
+#### Spiegazione del codice:
+
+1. **Definizione dei dizionari di esempio:**
+   - `diccionario1 = {'a': 1, 'b': 2, 'c': 3}` è un dizionario che non ha valori duplicati, quindi può essere invertito senza errori.
+   - `diccionario2 = {'x': 'apple', 'y': 'banana', 'z': 'banana'}` è un dizionario che ha un valore duplicato (due chiavi, `'y'` e `'z'`, mappano a `'banana'`), quindi restituirà un errore.
+
+2. **Messaggio introduttivo:**
+   La funzione stampa un messaggio che spiega lo scopo del programma.
+
+3. **Ciclo `for diccionario in [diccionario1, diccionario2]:`**
+   Viene creato un ciclo `for` che scorre i due dizionari (`diccionario1` e `diccionario2`) uno alla volta. Per ciascun dizionario, chiama la funzione `diccionario_inverso(diccionario)` per cercare di invertirlo.
+
+4. **Controllo dei risultati:**
+   - **Se il dizionario è stato invertito correttamente (`diccionario_inv` non è `None`):**
+     Il programma stampa il dizionario originale e quello invertito.
+   
+   - **Se c'è un errore (il dizionario contiene valori duplicati e `diccionario_inv` è `None`):**
+     Il programma stampa un messaggio di errore che indica che ci sono più chiavi con lo stesso valore.
+
+#### Esempio di esecuzione:
+
+Quando esegui il programma, otterrai qualcosa di simile:
+
+```
+Programa para invertir un diccionario dado con mensaje de error en caso de llaves dobles
+
+Diccionario original:
+{'a': 1, 'b': 2, 'c': 3}
+Diccionario invertido:
+{1: 'a', 2: 'b', 3: 'c'}
+
+Diccionario original:
+{'x': 'apple', 'y': 'banana', 'z': 'banana'}
+Error: multiple keys for one value
+```
+
+Nel primo caso, il dizionario è stato invertito con successo, mentre nel secondo caso il programma segnala un errore a causa dei valori duplicati (`'banana'`).
+
+---
+
+### Conclusioni:
+
+- **Funzione `diccionario_inverso`:** Inverte un dizionario, scambiando le chiavi con i valori. Se ci sono valori duplicati, restituisce `None`.
+- **Funzione `main_invertir_diccionario_con_error`:** Gestisce l'esecuzione del programma, mostra il risultato o un messaggio di errore a seconda del risultato dell'inversione del dizionario.
+- **Ciclo `for`:** Utilizzato per scorrere i dizionari e applicare la funzione di inversione, verificando eventuali errori.
+
+Questo programma è utile quando vuoi invertire un dizionario, ma devi essere sicuro che i valori non siano duplicati, altrimenti potresti perdere dati.
